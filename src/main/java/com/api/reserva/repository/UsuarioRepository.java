@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
 
-    //verificação básica de registros duplicados ao cadastrar
+    //verificação de registros duplicados ao cadastrar
     boolean existsByEmailOrTelefone(String email, String telefone);
 
     //buscando registros duplicados para put/patch, suporta dados parciais e nulos

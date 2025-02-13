@@ -2,8 +2,8 @@ package com.api.reserva.service;
 
 import com.api.reserva.dto.UsuarioDTO;
 import com.api.reserva.enums.UsuarioStatus;
-import com.api.reserva.exception.SemResultadosException;
 import com.api.reserva.exception.RegistroDuplicadoException;
+import com.api.reserva.exception.SemResultadosException;
 import com.api.reserva.model.UsuarioModel;
 import com.api.reserva.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;

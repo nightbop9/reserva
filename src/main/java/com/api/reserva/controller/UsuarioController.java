@@ -1,8 +1,8 @@
 package com.api.reserva.controller;
 
 import com.api.reserva.dto.UsuarioDTO;
-import com.api.reserva.exception.SemResultadosException;
 import com.api.reserva.exception.RegistroDuplicadoException;
+import com.api.reserva.exception.SemResultadosException;
 import com.api.reserva.model.UsuarioModel;
 import com.api.reserva.service.UsuarioService;
 import com.api.reserva.util.Messages;
