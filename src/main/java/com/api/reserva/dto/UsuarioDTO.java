@@ -5,6 +5,7 @@ import com.api.reserva.enums.UsuarioGenero;
 import com.api.reserva.enums.UsuarioRole;
 import com.api.reserva.enums.UsuarioStatus;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,6 +14,7 @@ public class UsuarioDTO{
     @NotBlank
     private String nome;
     @NotBlank
+    @Email
     private String email;
     @NotBlank
     private String senha;
@@ -37,6 +39,10 @@ public class UsuarioDTO{
         this.genero = genero;
         this.status = status;
         this.role = role;
+    }
+
+    public String tratarTelefone(String telefone) {
+        return telefone.replaceAll("[^0-9]", "");
     }
 
     public UsuarioDTO(Usuario usuario) {

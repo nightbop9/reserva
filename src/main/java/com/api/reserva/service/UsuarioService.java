@@ -28,7 +28,7 @@ public class UsuarioService {
 
     //Listar todas as pessoas
     public List<UsuarioDTO> listar() {
-        try{
+        try {
             List<Usuario> usuarios = repository.findAll();
             return usuarios.stream().map(UsuarioDTO::new).toList();
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class UsuarioService {
     }
 
     //Atualizar pessoa
-    public UsuarioDTO atualizartudo (UsuarioDTO user, Long id) {
+    public UsuarioDTO atualizartudo(UsuarioDTO user, Long id) {
         //verificando existencia no banco
         Usuario usuario = repository.findById(id).orElseThrow(() -> new SemResultadosException("atualização."));
 
@@ -70,17 +70,46 @@ public class UsuarioService {
     public UsuarioDTO atualizar(UsuarioDTO user, Long id) {
         Usuario usuario = repository.findById(id).orElseThrow(() -> new SemResultadosException("atualização."));
 
-        if ((user.getNome() != user.getNome()) && (user.getNome() != null || user.getNome() != " ")){
+        if (!user.getNome().equals(usuario.getNome())) {
             usuario.setNome(user.getNome());
         }
 
-        if ((user.getEmail() != user.getEmail()) && (user.getEmail() != null || user.getEmail() != " ")){
-           if(repository.existsByEmail(user.getEmail())){
-               throw new UsuarioDuplicadoException();
-           }
+        if (!user.getEmail().equals(usuario.getEmail())) {
             usuario.setEmail(user.getEmail());
         }
+
+        if (!user.getSenha().equals(usuario.getSenha())) {
+            usuario.setSenha(user.getSenha());
+        }
+
+        if (user.getTelefone().length() == 11) {
+            if (!user.getTelefone().equals(usuario.getTelefone())) {
+                String telefone = user.getTelefone();
+                telefone.replace(" ", "");
+                telefone.replace("-", "");
+                usuario.setTelefone(user.getTelefone());
+            }
+        }
+
+        if (!user.getGenero().equals(usuario.getGenero())) {
+            usuario.setGenero(user.getGenero());
+        }
+
+        if (!user.getStatus().equals(usuario.getStatus())) {
+            usuario.setStatus(user.getStatus());
+        }
+
+        if (!user.getRole().equals(usuario.getRole())) {
+            usuario.setRole(user.getRole());
+        }
+        return new UsuarioDTO(repository.save(usuario));
     }
 
-
+    //Deletar pessoa
+    public void deletar(Long id) {
+        if (!repository.existsById(id)) {
+            throw new SemResultadosException();
+        }
+        repository.deleteById(id);
+    }
 }

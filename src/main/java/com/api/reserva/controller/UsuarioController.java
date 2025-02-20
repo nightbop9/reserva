@@ -49,14 +49,8 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
-        try {
-            service.deletar(id);
-            return new ResponseEntity<>("Usuário excluído com sucesso!", HttpStatus.OK);
-        } catch (SemResultadosException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Messages.erroGenerico("Erro ao excluir ambiente.") + e.getMessage());
-        }
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -42,6 +42,8 @@ public class ExceptionGlobal {
                 .body("Verifique o campo " + e.getMessage() + "e tente novamente.");
     }
 
+
+    //Trata campos invalidos através de validação
     @ExceptionHandler(MethodArgumentNotValidException.class)
     //Trata campos invalidos através de validação com lista
     public ResponseEntity<List<String>> handler (MethodArgumentNotValidException e){
