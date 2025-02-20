@@ -1,12 +1,15 @@
 package com.api.reserva.service;
 
 import com.api.reserva.dto.UsuarioDTO;
+import com.api.reserva.enums.UsuarioRole;
 import com.api.reserva.enums.UsuarioStatus;
 import com.api.reserva.exception.SemResultadosException;
-import com.api.reserva.exception.RegistroDuplicadoException;
-import com.api.reserva.model.UsuarioModel;
+import com.api.reserva.exception.UsuarioDuplicadoException;
+import com.api.reserva.entity.Usuario;
 import com.api.reserva.repository.UsuarioRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,86 +21,65 @@ public class UsuarioService {
     UsuarioRepository repository;
 
     //Listar uma pessoa
-    public UsuarioModel listar(Long id) {
-        return repository.findById(id).orElseThrow(() -> new SemResultadosException());
+    public UsuarioDTO listar(Long id) {
+        return new UsuarioDTO(repository.findById(id)
+                .orElseThrow(() -> new SemResultadosException()));
     }
 
     //Listar todas as pessoas
-    public List<UsuarioModel> listarTudo() {
-        return repository.findAll();
+    public List<UsuarioDTO> listar() {
+        try{
+            List<Usuario> usuarios = repository.findAll();
+            return usuarios.stream().map(UsuarioDTO::new).toList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     //Cadastrar pessoa
-    public void cadastrar(UsuarioDTO user) {
+    public UsuarioDTO salvar(UsuarioDTO user) {
         //validação de duplicidade
-        if (repository.existsByEmailOrTelefone(user.email(), user.telefone())) {
-            throw new RegistroDuplicadoException();
+        if (repository.existsByEmailOrTelefone(user.getEmail(), user.getTelefone())) {
+            throw new UsuarioDuplicadoException();
         }
-        //conversão do DTO para a entidade e definição do status
-        UsuarioModel pessoa = new UsuarioModel(user);
-        pessoa.setStatus(UsuarioStatus.ativo);
-        repository.save(pessoa);
+        Usuario usuario = new Usuario(user);
+        usuario.setStatus(UsuarioStatus.ATIVO);
+        usuario.setRole(UsuarioRole.ESTUDANTE);
+        return new UsuarioDTO(repository.save(usuario));
     }
 
     //Atualizar pessoa
-    public void atualizarTudo(UsuarioDTO user, Long id) {
+    public UsuarioDTO atualizartudo (UsuarioDTO user, Long id) {
         //verificando existencia no banco
-        UsuarioModel usuario = repository.findById(id).orElseThrow(() -> new SemResultadosException("atualização."));
+        Usuario usuario = repository.findById(id).orElseThrow(() -> new SemResultadosException("atualização."));
 
-        if (repository.existsByEmailOrTelefoneAndIdNot(user.email(), user.telefone(), id)) {
-            throw new RegistroDuplicadoException();
+        if (repository.existsByEmailOrTelefoneAndIdNot(user.getEmail(), user.getTelefone(), id)) {
+            throw new UsuarioDuplicadoException();
         }
-        usuario.setNome(user.nome());
-        usuario.setEmail(user.email());
-        usuario.setSenha(user.senha());
-        usuario.setTelefone(user.telefone());
-        usuario.setGenero(user.genero());
-        usuario.setStatus(user.status());
-        repository.save(usuario);
-
-
+        usuario.setNome(user.getNome());
+        usuario.setEmail(user.getEmail());
+        usuario.setSenha(user.getSenha());
+        usuario.setTelefone(user.getTelefone());
+        usuario.setGenero(user.getGenero());
+        usuario.setStatus(user.getStatus());
+        usuario.setRole(user.getRole());
+        return new UsuarioDTO(repository.save(usuario));
     }
 
-    public void atualizar(UsuarioDTO user, Long id) {
-        UsuarioModel usuario = repository.findById(id).orElseThrow(() -> new SemResultadosException("atualização."));
+    public UsuarioDTO atualizar(UsuarioDTO user, Long id) {
+        Usuario usuario = repository.findById(id).orElseThrow(() -> new SemResultadosException("atualização."));
 
-        if (user.email() != null || user.telefone() != null) {
-            if (repository.existsByEmailOrTelefoneAndIdNot(user.email(), user.telefone(), id)) {
-                throw new RegistroDuplicadoException();
-            }
+        if ((user.getNome() != user.getNome()) && (user.getNome() != null || user.getNome() != " ")){
+            usuario.setNome(user.getNome());
         }
 
-        if (user.nome() != null) {
-            usuario.setNome(user.nome());
+        if ((user.getEmail() != user.getEmail()) && (user.getEmail() != null || user.getEmail() != " ")){
+           if(repository.existsByEmail(user.getEmail())){
+               throw new UsuarioDuplicadoException();
+           }
+            usuario.setEmail(user.getEmail());
         }
-
-        if (user.email() != null) {
-            usuario.setEmail(user.email());
-        }
-
-        if (user.senha() != null) {
-            usuario.setSenha(user.senha());
-        }
-
-        if (user.telefone() != null) {
-            usuario.setTelefone(user.telefone());
-        }
-
-        if (user.genero() != null) {
-            usuario.setGenero(user.genero());
-        }
-
-        if (user.status() != null) {
-            usuario.setStatus(user.status());
-        }
-        System.out.println(usuario);
-        repository.save(usuario);
-    }
-
-    //Deletar pessoa
-    public void deletar(Long id) {
-        repository.findById(id).orElseThrow(() -> new SemResultadosException("exclusão."));
-        repository.deleteById(id);
     }
 
 
