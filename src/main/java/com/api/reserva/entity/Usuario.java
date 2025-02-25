@@ -1,13 +1,15 @@
-package com.api.reserva.model;
+package com.api.reserva.entity;
 
 import com.api.reserva.dto.UsuarioDTO;
 import com.api.reserva.enums.UsuarioGenero;
+import com.api.reserva.enums.UsuarioRole;
 import com.api.reserva.enums.UsuarioStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "usuario")
-public class UsuarioModel {
+@Table(name = "tb_usuario")
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
@@ -20,17 +22,32 @@ public class UsuarioModel {
     private UsuarioGenero genero;
     @Enumerated(EnumType.STRING)
     private UsuarioStatus status;
+    @Enumerated(EnumType.STRING)
+    private UsuarioRole role;
 
-    public UsuarioModel() {}
+    public Usuario() {}
 
-    public UsuarioModel(UsuarioDTO user) {
-        this.id = user.id();
-        this.nome = user.nome();
-        this.email = user.email();
-        this.senha = user.senha();
-        this.telefone = user.telefone();
-        this.genero = user.genero();
-        this.status = user.status();
+    public Usuario(Long id, String nome, String email, String senha, String telefone,
+                   UsuarioGenero genero, UsuarioStatus status, UsuarioRole role) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.telefone = telefone;
+        this.genero = genero;
+        this.status = status;
+        this.role = role;
+    }
+
+    public Usuario(UsuarioDTO user) {
+        id = user.getId();
+        nome = user.getNome();
+        email = user.getEmail();
+        senha = user.getSenha();
+        telefone = user.getTelefone();
+        genero = user.getGenero();
+        status = user.getStatus();
+        role = user.getRole();
     }
 
     public Long getId() {
@@ -83,5 +100,13 @@ public class UsuarioModel {
 
     public void setStatus(UsuarioStatus status) {
         this.status = status;
+    }
+
+    public UsuarioRole getRole() {
+        return role;
+    }
+
+    public void setRole(UsuarioRole role) {
+        this.role = role;
     }
 }

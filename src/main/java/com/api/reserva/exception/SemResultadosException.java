@@ -8,8 +8,7 @@ public class SemResultadosException extends RuntimeException{
         super("Sem resultados.");
     }
 
-    public SemResultadosException(String acao) {
-        super("Entidade não encontrada para " + acao);
-        this.acao = acao;
+    public SemResultadosException(String operacao) {
+        super("Não encontrado(a) para " + operacao);
     }
 }
