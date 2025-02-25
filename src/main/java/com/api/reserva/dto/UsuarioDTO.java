@@ -45,10 +45,6 @@ public class UsuarioDTO {
         this.role = role;
     }
 
-    public String tratarTelefone(String telefone) {
-        return telefone.replaceAll("[^0-9]", "");
-    }
-
     public UsuarioDTO(Usuario usuario) {
         id = usuario.getId();
         nome = usuario.getNome();
