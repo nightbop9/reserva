@@ -47,14 +47,14 @@ public class ExceptionGlobal {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     //Trata campos invalidos através de validação com lista
     public ResponseEntity<List<String>> handler (MethodArgumentNotValidException e){
-        //Pega os erros de validação
+        //Obtém os erros de validação de derivados de @Valid
         List<String> erros = e.getBindingResult()
-                //Pega a lista de erros
+                //Obtém a lista objetos com informações dos erros
                 .getFieldErrors()
-                //Mapeia os erros
+                //Transforma em stream
                 .stream()
                 //Para cada erro, formata a mensagem
-                .map(erro -> String.format("O campo %s é obrigatório.", erro.getField()))
+                .map(erro -> String.format(erro.getDefaultMessage()))
                 //Transforma em lista
                 .toList();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
