@@ -3,10 +3,12 @@ package com.api.reserva.dto;
 import com.api.reserva.entity.Ambiente;
 import com.api.reserva.enums.Aprovacao;
 import com.api.reserva.enums.Disponibilidade;
-import com.api.reserva.enums.Tipo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class AmbienteDTO {
     private Long id;
@@ -24,8 +26,11 @@ public class AmbienteDTO {
 
     @NotNull(message = "Disponibilidade é obrigatória.")
     private Disponibilidade disponibilidade;
+
     @NotNull(message = "Tipo de de aprovação é obrigatória.")
     private Aprovacao aprovacao;
+
+    private Set<TipoDTO> tipos = new HashSet<>();
 
     public AmbienteDTO() {}
 
@@ -38,12 +43,13 @@ public class AmbienteDTO {
         this.aprovacao = aprovacao;
     }
 
-    public AmbienteDTO(Ambiente ambience) {
-        nome = ambience.getNome();
-        descricao = ambience.getDescricao();
-        identificacao = ambience.getIdentificacao();
-        disponibilidade = ambience.getDisponivel();
-        aprovacao = ambience.getAprovacao();
+    public AmbienteDTO(Ambiente ambiente) {
+        id = ambiente.getId();
+        nome = ambiente.getNome();
+        descricao = ambiente.getDescricao();
+        identificacao = ambiente.getIdentificacao();
+        disponibilidade = ambiente.getDisponibilidade();
+        aprovacao = ambiente.getAprovacao();
     }
 
     public Long getId() {
@@ -54,19 +60,31 @@ public class AmbienteDTO {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getDescricao() {
         return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public String getIdentificacao() {
         return identificacao;
     }
 
-    public Disponibilidade getDisponivel() {
+    public void setIdentificacao(String identificacao) {
+        this.identificacao = identificacao;
+    }
+
+    public Disponibilidade getDisponibilidade() {
         return disponibilidade;
     }
 
-    public void setDisponivel(Disponibilidade disponibilidade) {
+    public void setDisponibilidade(Disponibilidade disponibilidade) {
         this.disponibilidade = disponibilidade;
     }
 
@@ -76,5 +94,13 @@ public class AmbienteDTO {
 
     public void setAprovacao(Aprovacao aprovacao) {
         this.aprovacao = aprovacao;
+    }
+
+    public Set<TipoDTO> getTipos() {
+        return tipos;
+    }
+
+    public void setTipos(Set<TipoDTO> tipos) {
+        this.tipos = tipos;
     }
 }

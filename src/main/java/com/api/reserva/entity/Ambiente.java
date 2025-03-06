@@ -3,8 +3,10 @@ package com.api.reserva.entity;
 import com.api.reserva.dto.AmbienteDTO;
 import com.api.reserva.enums.Aprovacao;
 import com.api.reserva.enums.Disponibilidade;
-import com.api.reserva.enums.Tipo;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_ambiente")
@@ -18,7 +20,7 @@ public class Ambiente {
 
     private String descricao;
 
-    @Column(nullable = false, unique = true, length = 7)
+    @Column(nullable = false, unique = true, length = 6)
     private String identificacao;
 
     @Column(nullable = false)
@@ -29,27 +31,33 @@ public class Ambiente {
     @Enumerated(EnumType.STRING)
     private Aprovacao aprovacao;
 
-//    @JoinTable(name = "tb_ambiente_tag", joinColumns =
-//    @JoinColumn )
+    // Mapeamento muitos para muitos entre Ambiente e Tipo
+    @ManyToMany
+    @JoinTable(
+            name = "tb_ambiente_tipo",
+            joinColumns = @JoinColumn(name = "ambiente_id"),
+            inverseJoinColumns = @JoinColumn(name = "tipo_id")
+    )
+    private Set<Tipo> tipos = new HashSet<>();
 
-    public Ambiente() {}
-    public Ambiente(String nome, String descricao, String identificacao, Tipo tipo, Disponibilidade disponibilidade, Aprovacao aprovacao) {
+    public Ambiente() {
+    }
+
+    public Ambiente(String nome, String descricao, String identificacao, Disponibilidade disponibilidade, Aprovacao aprovacao) {
         this.nome = nome;
         this.descricao = descricao;
         this.identificacao = identificacao;
-        this.tipo = tipo;
         this.disponibilidade = disponibilidade;
         this.aprovacao = aprovacao;
     }
 
-    public Ambiente(AmbienteDTO ambience) {
-        id = ambience.getId();
-        nome = ambience.getNome();
-        descricao = ambience.getDescricao();
-        identificacao = ambience.getIdentificacao();
-        tipo = ambience.getTipo();
-        disponibilidade = ambience.getDisponivel();
-        aprovacao = ambience.getAprovacao();
+    public Ambiente(AmbienteDTO ambienteDTO) {
+        id = ambienteDTO.getId();
+        nome = ambienteDTO.getNome();
+        descricao = ambienteDTO.getDescricao();
+        identificacao = ambienteDTO.getIdentificacao();
+        disponibilidade = ambienteDTO.getDisponibilidade();
+        aprovacao = ambienteDTO.getAprovacao();
     }
 
     public Long getId() {
@@ -80,19 +88,11 @@ public class Ambiente {
         this.identificacao = identificacao;
     }
 
-    public Tipo getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
-    }
-
-    public Disponibilidade getDisponivel() {
+    public Disponibilidade getDisponibilidade() {
         return disponibilidade;
     }
 
-    public void setDisponivel(Disponibilidade disponibilidade) {
+    public void setDisponibilidade(Disponibilidade disponibilidade) {
         this.disponibilidade = disponibilidade;
     }
 
@@ -102,5 +102,13 @@ public class Ambiente {
 
     public void setAprovacao(Aprovacao aprovacao) {
         this.aprovacao = aprovacao;
+    }
+
+    public Set<Tipo> getTipos() {
+        return tipos;
+    }
+
+    public void setTipos(Set<Tipo> tipos) {
+        this.tipos = tipos;
     }
 }
