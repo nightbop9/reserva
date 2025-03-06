@@ -13,17 +13,13 @@ public class Ambiente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String nome;
 
     private String descricao;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 7)
     private String identificacao;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Tipo tipo;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -32,6 +28,9 @@ public class Ambiente {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Aprovacao aprovacao;
+
+//    @JoinTable(name = "tb_ambiente_tag", joinColumns =
+//    @JoinColumn )
 
     public Ambiente() {}
     public Ambiente(String nome, String descricao, String identificacao, Tipo tipo, Disponibilidade disponibilidade, Aprovacao aprovacao) {

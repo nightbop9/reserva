@@ -22,8 +22,6 @@ public class AmbienteDTO {
     @Size(min = 3, max = 6, message = "Identificação deve ter entre 3 e 6 caracteres.")
     private String identificacao;
 
-    @NotNull(message = "Ao menos um tipo é obrigatório.")
-    private Tipo tipo;
     @NotNull(message = "Disponibilidade é obrigatória.")
     private Disponibilidade disponibilidade;
     @NotNull(message = "Tipo de de aprovação é obrigatória.")
@@ -31,12 +29,11 @@ public class AmbienteDTO {
 
     public AmbienteDTO() {}
 
-    public AmbienteDTO(Long id, String nome, String descricao, String identificacao, Tipo tipo, Disponibilidade disponibilidade, Aprovacao aprovacao) {
+    public AmbienteDTO(Long id, String nome, String descricao, String identificacao, Disponibilidade disponibilidade, Aprovacao aprovacao) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.identificacao = identificacao;
-        this.tipo = tipo;
         this.disponibilidade = disponibilidade;
         this.aprovacao = aprovacao;
     }
@@ -45,7 +42,6 @@ public class AmbienteDTO {
         nome = ambience.getNome();
         descricao = ambience.getDescricao();
         identificacao = ambience.getIdentificacao();
-        tipo = ambience.getTipo();
         disponibilidade = ambience.getDisponivel();
         aprovacao = ambience.getAprovacao();
     }
@@ -64,14 +60,6 @@ public class AmbienteDTO {
 
     public String getIdentificacao() {
         return identificacao;
-    }
-
-    public Tipo getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
     }
 
     public Disponibilidade getDisponivel() {
