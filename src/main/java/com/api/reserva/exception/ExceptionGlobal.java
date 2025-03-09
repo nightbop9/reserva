@@ -12,6 +12,14 @@ import java.util.List;
 //Captura exceções globais com Status e Mensagem dedicada
 public class ExceptionGlobal {
 
+    /**
+     * Trata exceções relacionadas à ausência de resultados em operações de consulta.
+     * Este handler é acionado quando uma operação tenta recuperar uma entidade que não existe,
+     * como ao buscar um registro por ID que não está no banco de dados.
+     *
+     * @param e A exceção de ausência de resultados capturada
+     * @return ResponseEntity com status 404 (Not Found) e mensagem de erro detalhando o problema
+     */
     //Trata requisicoes sem resultados
     @ExceptionHandler(SemResultadosException.class)
     public ResponseEntity<String> handler(SemResultadosException e) {
@@ -26,7 +34,6 @@ public class ExceptionGlobal {
                 .body(e.getMessage());
     }
 
-    //Trata campos invalidos
 
 
     //Trata erros internos no servidor
@@ -42,7 +49,14 @@ public class ExceptionGlobal {
                 .body("Verifique o campo " + e.getMessage() + "e tente novamente.");
     }
 
-
+    /**
+     * Trata exceções de validação de argumentos de método.
+     * Este handler captura erros gerados pelas anotações de validação (@Valid) nos controladores,
+     * extraindo as mensagens de erro de cada campo e retornando-as como uma lista.
+     *
+     * @param e A exceção de validação que contém todos os erros de validação de campos
+     * @return ResponseEntity com status 400 (Bad Request) e uma lista de mensagens de erro de validação
+     */
     //Trata campos invalidos através de validação
     @ExceptionHandler(MethodArgumentNotValidException.class)
     //Trata campos invalidos através de validação com lista
@@ -61,5 +75,15 @@ public class ExceptionGlobal {
                 .body(erros);
     }
 
-
+    /**
+     * Trata exceções relacionadas a tentativas de inserção ou atualização com dados duplicados.
+     *
+     * @param e A exceção de dado duplicado capturada
+     * @return ResponseEntity com status 409 (Conflict) e mensagem de erro detalhando o campo duplicado
+     */
+    @ExceptionHandler(DadoDuplicadoException.class)
+    public ResponseEntity<String> handler (DadoDuplicadoException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(e.getMessage());
+    }
 }

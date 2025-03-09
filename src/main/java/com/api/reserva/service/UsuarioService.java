@@ -26,10 +26,8 @@ public class UsuarioService {
 
     //Listar todas as pessoas
     public List<UsuarioDTO> listar() {
-
         List<Usuario> usuarios = repository.findAll();
         return usuarios.stream().map(UsuarioDTO::new).toList();
-
     }
         //Cadastrar pessoa=-
         public UsuarioDTO salvar (UsuarioDTO user){

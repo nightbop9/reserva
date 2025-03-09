@@ -1,14 +1,19 @@
 package com.api.reserva.exception;
 
 public class SemResultadosException extends RuntimeException{
-    private String message;
-    private String acao;
+    private final String operacao;
 
     public SemResultadosException(){
         super("Sem resultados.");
+        this.operacao = null;
     }
 
     public SemResultadosException(String operacao) {
-        super("Não encontrado(a) para " + operacao);
+        super(String.format("Entidade não encontrada para %s.", operacao));
+        this.operacao = operacao;
+    }
+
+    public String getOperacao() {
+        return operacao;
     }
 }

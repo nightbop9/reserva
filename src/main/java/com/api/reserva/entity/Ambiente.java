@@ -58,6 +58,9 @@ public class Ambiente {
         identificacao = ambienteDTO.getIdentificacao();
         disponibilidade = ambienteDTO.getDisponibilidade();
         aprovacao = ambienteDTO.getAprovacao();
+        if(ambienteDTO.getTipos() != null) {
+
+        }
     }
 
     public Long getId() {
